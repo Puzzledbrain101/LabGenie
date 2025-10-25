@@ -43,7 +43,7 @@ export function FileSidebar({ open, onOpenChange, onRecordSelect }: FileSidebarP
   );
 
   const createRecordMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (): Promise<LabRecord> => { // Added return type
       return await apiRequest('POST', '/api/lab-records', {
         title: 'New Lab Record',
         templateType: 'physics',
@@ -70,7 +70,7 @@ export function FileSidebar({ open, onOpenChange, onRecordSelect }: FileSidebarP
   });
 
   const duplicateRecordMutation = useMutation({
-    mutationFn: async (recordId: string) => {
+    mutationFn: async (recordId: string): Promise<LabRecord> => { // Added return type
       return await apiRequest('POST', `/api/lab-records/${recordId}/duplicate`, {});
     },
     onSuccess: () => {
@@ -82,7 +82,7 @@ export function FileSidebar({ open, onOpenChange, onRecordSelect }: FileSidebarP
   });
 
   const deleteRecordMutation = useMutation({
-    mutationFn: async (recordId: string) => {
+    mutationFn: async (recordId: string): Promise<void> => { // Added return type
       await apiRequest('DELETE', `/api/lab-records/${recordId}`, {});
     },
     onSuccess: () => {

@@ -66,7 +66,7 @@ export default function EditorIntegrated() {
 
   // Create new record mutation
   const createRecordMutation = useMutation({
-    mutationFn: async (data: { title: string; templateType: string }) => {
+    mutationFn: async (data: { title: string; templateType: string }): Promise<LabRecord> => {
       const response = await apiRequest('POST', '/api/lab-records', data);
       return response;
     },
@@ -86,7 +86,7 @@ export default function EditorIntegrated() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/login";
         }, 500);
         return;
       }
@@ -113,7 +113,7 @@ export default function EditorIntegrated() {
 
   // Create section mutation
   const createSectionMutation = useMutation({
-    mutationFn: async (data: Omit<Section, 'id' | 'createdAt' | 'updatedAt'>) => {
+    mutationFn: async (data: Omit<Section, 'id' | 'createdAt' | 'updatedAt'>): Promise<Section> => {
       const response = await apiRequest('POST', `/api/lab-records/${currentRecordId}/sections`, data);
       return response;
     },

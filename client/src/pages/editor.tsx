@@ -139,6 +139,7 @@ export default function Editor() {
         isSaving={saveStatus === 'saving'}
         saveStatus={saveStatus}
         isPreviewMode={isPreviewMode}
+        sections={sections}
       />
 
       {/* Main Content Area */}

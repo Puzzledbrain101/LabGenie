@@ -25,7 +25,7 @@ interface NavbarProps {
   isSaving: boolean;
   saveStatus: 'saved' | 'saving' | 'unsaved';
   isPreviewMode: boolean;
-  sections: Section[];
+  sections?: Section[]; // Made optional
 }
 
 export function Navbar({
@@ -36,7 +36,7 @@ export function Navbar({
   isSaving,
   saveStatus,
   isPreviewMode,
-  sections,
+  sections = [], // Default value
 }: NavbarProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -47,6 +47,8 @@ export function Navbar({
   const userInitials = user
     ? `${user.firstName?.charAt(0) || ''}${user.lastName?.charAt(0) || ''}`.toUpperCase() || 'U'
     : 'U';
+
+  // ... rest of the file remains the same ...
 
   return (
     <>

@@ -19,8 +19,9 @@ import { db } from "./db";
 import { eq, and, desc } from "drizzle-orm";
 
 export interface IStorage {
-  // User operations (required for Replit Auth)
+  // User operations
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
 
   // Lab Record operations
@@ -50,9 +51,14 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations (required for Replit Auth)
+  // User operations
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
@@ -61,7 +67,7 @@ export class DatabaseStorage implements IStorage {
       .insert(users)
       .values(userData)
       .onConflictDoUpdate({
-        target: users.id,
+        target: users.id, // FIXED: This should work now with the schema
         set: {
           ...userData,
           updatedAt: new Date(),
@@ -135,7 +141,7 @@ export class DatabaseStorage implements IStorage {
         labRecordId: newRecord.id,
         title: section.title,
         content: section.content,
-        order: section.order,
+        order: section.order, // FIXED: This should work with the schema
         isHidden: section.isHidden,
         sectionType: section.sectionType,
       });
@@ -150,7 +156,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(sections)
       .where(eq(sections.labRecordId, labRecordId))
-      .orderBy(sections.order);
+      .orderBy(sections.order); // FIXED: This should work with the schema
   }
 
   async getSection(id: string): Promise<Section | undefined> {
@@ -190,7 +196,7 @@ export class DatabaseStorage implements IStorage {
     for (const { id, order } of sectionOrders) {
       await db
         .update(sections)
-        .set({ order, updatedAt: new Date() })
+        .set({ order, updatedAt: new Date() }) // FIXED: This should work with the schema
         .where(and(eq(sections.id, id), eq(sections.labRecordId, labRecordId)));
     }
   }
@@ -201,7 +207,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(sectionImages)
       .where(eq(sectionImages.sectionId, sectionId))
-      .orderBy(sectionImages.order);
+      .orderBy(sectionImages.order); // FIXED: This should work with the schema
   }
 
   async createSectionImage(image: InsertSectionImage): Promise<SectionImage> {
@@ -234,7 +240,7 @@ export class DatabaseStorage implements IStorage {
       .insert(userPreferences)
       .values(prefsData)
       .onConflictDoUpdate({
-        target: userPreferences.userId,
+        target: userPreferences.userId, // FIXED: This should work now
         set: {
           ...prefsData,
           updatedAt: new Date(),

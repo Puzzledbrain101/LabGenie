@@ -60,7 +60,7 @@ export default function Landing() {
           <div className="flex justify-center pt-4">
             <Button
               size="lg"
-              onClick={() => window.location.href = '/api/login'}
+              onClick={() => window.location.href = '/login'}
               className="text-base px-8 min-h-12"
               data-testid="button-login"
             >
