@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -6,7 +6,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import type { Section } from '@shared/schema';
+import type { Section, SectionImage } from '@shared/schema';
+import { apiRequest } from '@/lib/queryClient';
 
 interface PreviewPanelProps {
   sections: Section[];
@@ -14,11 +15,40 @@ interface PreviewPanelProps {
   customization?: any;
 }
 
+interface SectionWithImages extends Section {
+  images?: SectionImage[];
+}
+
 export function PreviewPanel({ sections, recordTitle, customization }: PreviewPanelProps) {
   const { t } = useTranslation();
   const [zoom, setZoom] = useState(100);
+  const [sectionsWithImages, setSectionsWithImages] = useState<SectionWithImages[]>([]);
 
   const visibleSections = sections.filter((s) => !s.isHidden).sort((a, b) => a.order - b.order);
+
+  // Fetch images for each section
+  useEffect(() => {
+    const fetchSectionImages = async () => {
+      const sectionsWithImagesData = await Promise.all(
+        visibleSections.map(async (section) => {
+          try {
+            const images = await apiRequest('GET', `/api/sections/${section.id}/images`);
+            return { ...section, images };
+          } catch (error) {
+            console.error(`Error fetching images for section ${section.id}:`, error);
+            return { ...section, images: [] };
+          }
+        })
+      );
+      setSectionsWithImages(sectionsWithImagesData);
+    };
+
+    if (visibleSections.length > 0) {
+      fetchSectionImages();
+    } else {
+      setSectionsWithImages([]);
+    }
+  }, [visibleSections]);
 
   const zoomLevels = [50, 75, 100, 125, 150];
 
@@ -84,6 +114,39 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
     }
   };
 
+  const renderSectionImages = (images: SectionImage[]) => {
+    if (!images || images.length === 0) return null;
+
+    return (
+      <div className="space-y-4 mt-4">
+        {images.map((image) => (
+          <div 
+            key={image.id} 
+            className={`flex flex-col items-center ${
+              image.alignment === 'left' ? 'items-start' :
+              image.alignment === 'right' ? 'items-end' :
+              'items-center'
+            }`}
+          >
+            <img 
+              src={`http://localhost:3001${image.imageUrl}`}
+              alt={image.caption || 'Section image'}
+              className={`rounded border ${
+                image.width === 25 ? 'max-w-[25%]' :
+                image.width === 50 ? 'max-w-[50%]' :
+                image.width === 75 ? 'max-w-[75%]' :
+                'max-w-full'
+              }`}
+            />
+            {image.caption && (
+              <p className="text-sm text-gray-600 mt-2 text-center italic">{image.caption}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col h-full bg-muted/30">
       {/* Zoom Controls */}
@@ -135,12 +198,12 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
 
               {/* Sections */}
               <div className="space-y-6">
-                {visibleSections.length === 0 ? (
+                {sectionsWithImages.length === 0 ? (
                   <div className="text-center py-12 text-gray-400">
                     <p className="text-sm">{t('section.add')}</p>
                   </div>
                 ) : (
-                  visibleSections.map((section) => (
+                  sectionsWithImages.map((section) => (
                     <div key={section.id} className="space-y-3" data-testid={`preview-section-${section.id}`}>
                       {/* Section Title */}
                       <h2 className="text-xl font-semibold border-b border-gray-300 pb-2">
@@ -156,11 +219,15 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
                             <code className="font-mono text-sm">{section.content || ''}</code>
                           </pre>
                         ) : (
-                          <div className="prose prose-sm max-w-none">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {section.content || ''}
-                            </ReactMarkdown>
-                          </div>
+                          <>
+                            <div className="prose prose-sm max-w-none">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {section.content || ''}
+                              </ReactMarkdown>
+                            </div>
+                            {/* Render section images */}
+                            {renderSectionImages(section.images || [])}
+                          </>
                         )}
                       </div>
                     </div>
