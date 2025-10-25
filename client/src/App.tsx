@@ -7,26 +7,72 @@ import { useAuth } from "@/hooks/useAuth";
 import Landing from "@/pages/landing";
 import EditorIntegrated from "@/pages/editor-integrated";
 import NotFound from "@/pages/not-found";
+import Login from "@/pages/login"; // ADD THIS IMPORT
 import "./lib/i18n";
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  // Debug logs
+  console.log('🔧 [ROUTER] Auth state:', { 
+    isAuthenticated, 
+    isLoading, 
+    user,
+    hasToken: !!localStorage.getItem('token'),
+    token: localStorage.getItem('token') ? 'Present' : 'Missing'
+  });
+  console.log('🔧 [ROUTER] Current URL:', window.location.href);
+
+  // If still loading, show nothing or loading screen
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Switch>
-      {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+      {/* Public routes - accessible without authentication */}
+      <Route path="/login">
+        {(params) => {
+          console.log('🔧 [ROUTER] Rendering Login page');
+          return <Login />;
+        }}
+      </Route>
+      
+      {/* Protected routes - require authentication */}
+      {isAuthenticated ? (
+        <>
+          <Route path="/">
+            {(params) => {
+              console.log('🔧 [ROUTER] Rendering EditorIntegrated page - User IS authenticated');
+              return <EditorIntegrated />;
+            }}
+          </Route>
+        </>
       ) : (
         <>
-          <Route path="/" component={EditorIntegrated} />
+          <Route path="/">
+            {(params) => {
+              console.log('🔧 [ROUTER] Rendering Landing page - User NOT authenticated');
+              return <Landing />;
+            }}
+          </Route>
         </>
       )}
-      <Route component={NotFound} />
+      
+      {/* Catch-all 404 */}
+      <Route>
+        {(params) => {
+          console.log('🔧 [ROUTER] Rendering NotFound page - No route matched');
+          return <NotFound />;
+        }}
+      </Route>
     </Switch>
   );
 }
 
 function App() {
+  console.log('🔧 [APP] App component mounted');
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

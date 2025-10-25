@@ -14,6 +14,8 @@ export async function apiRequest(
 ): Promise<any> {
   const token = localStorage.getItem('token');
   
+  console.log('🔧 [apiRequest] Making request:', { method, url, hasToken: !!token });
+  
   const res = await fetch(url, {
     method,
     headers: {
@@ -24,6 +26,8 @@ export async function apiRequest(
     credentials: "include",
   });
 
+  console.log('🔧 [apiRequest] Response:', { status: res.status, url });
+  
   await throwIfResNotOk(res);
   return await res.json();
 }
@@ -35,13 +39,19 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const token = localStorage.getItem('token');
+    const url = queryKey.join("/") as string;
     
-    const res = await fetch(queryKey.join("/") as string, {
+    console.log('🔧 [getQueryFn] Making query:', { url, hasToken: !!token });
+    
+    const res = await fetch(url, {
       credentials: "include",
       headers: token ? { "Authorization": `Bearer ${token}` } : {},
     });
 
+    console.log('🔧 [getQueryFn] Query response:', { status: res.status, url });
+    
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+      console.log('🔧 [getQueryFn] Returning null due to 401');
       return null;
     }
 

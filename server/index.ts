@@ -15,8 +15,9 @@ declare module 'http' {
 }
 
 // ADD CORS MIDDLEWARE HERE
+// ADD CORS MIDDLEWARE HERE
 app.use(cors({
-  origin: 'http://localhost:3001',
+  origin: 'http://localhost:3001',  // ← THIS IS THE ISSUE
   credentials: true
 }));
 
