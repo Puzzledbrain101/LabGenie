@@ -26,21 +26,27 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
 
   const visibleSections = sections.filter((s) => !s.isHidden).sort((a, b) => a.order - b.order);
 
-  // Fetch images for each section
+  // Fetch images for sections - simplified approach
   useEffect(() => {
     const fetchSectionImages = async () => {
-      const sectionsWithImagesData = await Promise.all(
-        visibleSections.map(async (section) => {
-          try {
-            const images = await apiRequest('GET', `/api/sections/${section.id}/images`);
-            return { ...section, images };
-          } catch (error) {
-            console.error(`Error fetching images for section ${section.id}:`, error);
-            return { ...section, images: [] };
-          }
-        })
-      );
-      setSectionsWithImages(sectionsWithImagesData);
+      try {
+        const sectionsWithImagesData = await Promise.all(
+          visibleSections.map(async (section) => {
+            try {
+              const images = await apiRequest('GET', `/api/sections/${section.id}/images`);
+              return { ...section, images };
+            } catch (error) {
+              console.error(`Error fetching images for section ${section.id}:`, error);
+              return { ...section, images: [] };
+            }
+          })
+        );
+        setSectionsWithImages(sectionsWithImagesData);
+      } catch (error) {
+        console.error('Error fetching section images:', error);
+        // Fallback: use sections without images
+        setSectionsWithImages(visibleSections.map(section => ({ ...section, images: [] })));
+      }
     };
 
     if (visibleSections.length > 0) {
@@ -48,7 +54,7 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
     } else {
       setSectionsWithImages([]);
     }
-  }, [visibleSections]);
+  }, [sections]); // Watch the entire sections array for changes
 
   const zoomLevels = [50, 75, 100, 125, 150];
 
@@ -122,7 +128,7 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
         {images.map((image) => (
           <div 
             key={image.id} 
-            className={`flex flex-col items-center ${
+            className={`flex flex-col ${
               image.alignment === 'left' ? 'items-start' :
               image.alignment === 'right' ? 'items-end' :
               'items-center'
@@ -146,6 +152,15 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
       </div>
     );
   };
+
+  // Use the latest sections data directly for content, but keep images from fetched data
+  const displaySections = visibleSections.map(section => {
+    const sectionWithImages = sectionsWithImages.find(s => s.id === section.id);
+    return {
+      ...section, // Use the latest section data (content, title, etc.)
+      images: sectionWithImages?.images || []
+    };
+  });
 
   return (
     <div className="flex flex-col h-full bg-muted/30">
@@ -198,12 +213,12 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
 
               {/* Sections */}
               <div className="space-y-6">
-                {sectionsWithImages.length === 0 ? (
+                {displaySections.length === 0 ? (
                   <div className="text-center py-12 text-gray-400">
                     <p className="text-sm">{t('section.add')}</p>
                   </div>
                 ) : (
-                  sectionsWithImages.map((section) => (
+                  displaySections.map((section) => (
                     <div key={section.id} className="space-y-3" data-testid={`preview-section-${section.id}`}>
                       {/* Section Title */}
                       <h2 className="text-xl font-semibold border-b border-gray-300 pb-2">
