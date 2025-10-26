@@ -236,9 +236,15 @@ export function PreviewPanel({ sections, recordTitle, customization }: PreviewPa
                         ) : (
                           <>
                             <div className="prose prose-sm max-w-none">
-                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                             <ReactMarkdown 
+                                 remarkPlugins={[remarkGfm]}
+                                 components={{
+                                 // Allow custom HTML tags
+                                  u: ({node, ...props}) => <u {...props} />
+                              }}
+                              >
                                 {section.content || ''}
-                              </ReactMarkdown>
+                             </ReactMarkdown>
                             </div>
                             {/* Render section images */}
                             {renderSectionImages(section.images || [])}
