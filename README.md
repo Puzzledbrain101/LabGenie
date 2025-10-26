@@ -1,68 +1,94 @@
-﻿# HTF25-Team-324
+# 🧪 LabGenie
 
-## GitHub submission guide
+**Team 324 | Problem Statement: Laboratory Record Generator (Beginner)**  
 
-In this Readme, you will find a guide on how to fork this Repository, add files to it, and make a pull request to contribute your changes.
+LabGenie helps students automatically generate clean, standardized, and ready-to-submit lab records. With a built-in structure for all essential fields — from aim and theory to output and conclusion — LabGenie saves time, ensures consistency, and enhances productivity for students and institutions alike.
 
-<details open>
-<summary><h3>1. Login to your GitHub Account</h3></summary>
-<br>
-<p>Go to <a href="https://github.com">github.com</a> to log in.</p>
-<ul>
-   <li>Open the <a href="https://github.com/cbitosc/HTF25-Team-324">current repo</a> in a new tab.</li>
-   <li>Perform all operations in the newly opened tab, and follow the current tab for instructions.</li>
-</ul>
-</details>
+---
 
-<details open>
-<summary><h3>2. Fork the Repository</h3></summary>
-<br>
-<p align="center">
-  <img src="fork.jpeg" alt="Fork the Repository" height="300">
-</p>
-<ul>
- <li>In the newly opened tab, on the top-right corner, click on <b>Fork</b>.</li>
- <li>Enter the <b>Repository Name</b> as <b>HTF25-Team-324</b>.</li>
- <li>Then click <b>Create Fork</b>, leaving all other fields as default.</li>
- <li>After a few moments, you can view your forked repo.</li>
-</ul>
-</details>
+## 👥 Team Members
 
-<details open>
-<summary><h3>3. Clone your Repository</h3></summary>
-<br>
-<ul>
- <li>Click on <b>Code</b> and copy the <b>web URL</b> of your forked repository.</li>
- <li>Open terminal on your local machine.</li>
- <li>Run this command to clone the repo:</li>
-<pre><code>git clone https://github.com/your-username/HTF25-Team-324.git</code></pre>
-</ul>
-</details>
+| Name | Role | GitHub |
+|------|------|--------|
+| **Swayam Shah** | Full Stack Developer | [Puzzledbrain101](https://github.com/Puzzledbrain101) |
+| **Dhvanil Shah** | Developer | [https://github.com/Dhvanil852]
+| **Utkarsh Gokani** | Frontend Developer | [Utkarshgokani](https://github.com/Utkarshgokani) |
+| **Aditya Shah** | Backend Developer | [AdiAce24](https://github.com/AdiAce24) |
+| **Rushabh Shah** | Developer | [https://github.com/rushbyte29]
 
-<details open>
-<summary><h3>4. Adding files to the Repository</h3></summary>
-<br>
-<ul>
- <li>While doing it for the first time, create a new branch for your changes:</li>
-<pre><code>git checkout -b branch-name</code></pre>
- <li>Add files or modify existing ones.</li>
- <li>Stage your changes:</li>
-<pre><code>git add .</code></pre>
- <li>Commit your changes:</li>
-<pre><code>git commit -m "Descriptive commit message"</code></pre>
- <li>Push your branch to your fork:</li>
-<pre><code>git push origin branch-name</code></pre>
-</ul>
-</details>
+---
 
-<details open>
-<summary><h3>5. Create a Pull Request</h3></summary>
-<br>
-<ul>
- <li>Click on the <b>Contribute</b> button in your fork and choose <b>Open Pull Request</b>.</li>
- <li>Leave all fields as default, then click <b>Create Pull Request</b>.</li>
- <li>Wait a few moments; your PR is now submitted.</li>
-</ul>
-</details>
+## 🚀 Features
 
-## Thanks for participating!
+- 📋 **Automated Lab Record Creation** – Generate full lab reports instantly with predefined structure.  
+- 🧠 **Standardized Templates** – Maintain consistent formatting across all lab records.  
+- 💾 **Export to PDF/Word** – Download completed reports instantly in your preferred format.  
+- 🎨 **User-Friendly Interface** – Simple, clean UI designed for efficiency.  
+- ⚡ **Error-Free Formatting** – Automatically handles alignment, spacing, and layout.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies Used |
+|-------|-------------------|
+| **Frontend** | React.js, Tailwind CSS , TypeScript |
+| **Backend** | Node.js, Express.js |
+| **Database** | PostgreSQL, Drizzle ORM |
+| **Other Tools** | JWT Authentication, WebSockets |
+
+---
+
+## 💻 Getting Started
+
+### Prerequisites
+
+Ensure you have these installed:
+- Node.js  
+- PostgreSQL 
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Puzzledbrain101/HTF25-Team-324.git
+
+# Navigate to the project folder
+cd HTF25-Team-324
+
+# Install dependencies for both frontend and backend
+cd client
+npm install
+cd ../server
+npm install
+Running the Application
+Start the backend server (Port: 3001)
+
+bash
+Copy code
+cd server
+npm start
+Start the frontend development server
+
+bash
+Copy code
+cd client
+npm start
+Now open your browser and visit 👉 http://localhost:3001
+
+📘 Project Description
+LabGenie simplifies lab documentation by automating the record-making process.
+Students can input essential details like the experiment’s aim, tools, code, and conclusion, and the app generates a formatted, exportable lab record.
+It ensures consistency, saves time, and helps educators easily review digital lab reports.
+
+📂 Repository Links
+🔗 Main Repository: cbitosc/HTF25-Team-324
+🔁 Forked Repository: Puzzledbrain101/HTF25-Team-324
+
+
+💡 Acknowledgments
+🙌 Special thanks to CBIT Hacktoberfest 2025 organizers for the opportunity.
+
+💭 Inspiration: Simplifying student workflow through automation.
+
+🧑‍💻 Built with passion by Team 324.
