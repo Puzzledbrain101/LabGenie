@@ -1,6 +1,6 @@
 # 🧪 LabGenie
 
-**Team 324 | Problem Statement: Laboratory Record Generator (Beginner)**  
+**Team 324 | Problem Statement: Laboratory Record Generator**  
 
 LabGenie helps students automatically generate clean, standardized, and ready-to-submit lab records. With a built-in structure for all essential fields — from aim and theory to output and conclusion — LabGenie saves time, ensures consistency, and enhances productivity for students and institutions alike.
 
@@ -81,13 +81,6 @@ LabGenie simplifies lab documentation by automating the record-making process.
 Students can input essential details like the experiment’s aim, tools, code, and conclusion, and the app generates a formatted, exportable lab record.
 It ensures consistency, saves time, and helps educators easily review digital lab reports.
 
-📂 Repository Links
-🔗 Main Repository: cbitosc/HTF25-Team-324
-🔁 Forked Repository: Puzzledbrain101/HTF25-Team-324
-
-
-💡 Acknowledgments
-🙌 Special thanks to CBIT Hacktoberfest 2025 organizers for the opportunity.
 
 💭 Inspiration: Simplifying student workflow through automation.
 
